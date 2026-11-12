@@ -1,0 +1,156 @@
+:root {
+  --bg: #1b1b1b;
+  --panel: #242424;
+  --raised: #2e2e2e;
+  --hover: #292929;
+  --well: #1a1a1a;
+  --text: #d6d6d6;
+  --muted: #8c8c8c;
+  --dim: #555;
+  --zero: #0b0b0b;
+  --one: #ececec;
+  --err: #c0574b;
+  /* One corner radius for every box; gaps between boxes match it. */
+  --radius: 10px;
+  --gap: 10px;
+  /* Every interactive control is this tall. */
+  --control-h: 32px;
+  /* Inset of a knob inside its track (switch, slider). */
+  --knob-pad: 3px;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4), 0 2px 6px rgb(0 0 0 / 0.2);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 20px rgb(0 0 0 / 0.28);
+  --inset: inset 0 1px 3px rgb(0 0 0 / 0.5);
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  color-scheme: dark;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.5 var(--mono);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+}
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: var(--raised);
+  border: 0;
+  box-sizing: border-box;
+  height: var(--control-h);
+  border-radius: var(--radius);
+  padding: 0 14px;
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  transition:
+    background-color 0.12s,
+    box-shadow 0.12s,
+    transform 0.06s;
+}
+
+button:hover:not(:disabled) {
+  background: #363636;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 0 1px rgb(0 0 0 / 0.5);
+}
+
+button:disabled {
+  color: var(--dim);
+  background: var(--panel);
+  box-shadow: none;
+  cursor: default;
+}
+
+button.primary {
+  background: var(--one);
+  color: var(--zero);
+}
+
+button.primary:hover {
+  background: #fff;
+}
+
+select,
+input[type="text"] {
+  font: inherit;
+  color: var(--text);
+  background: var(--well);
+  border: 0;
+  box-sizing: border-box;
+  height: var(--control-h);
+  border-radius: var(--radius);
+  padding: 0 10px;
+  box-shadow: var(--inset);
+}
+
+:focus-visible {
+  outline: 1px solid var(--muted);
+  outline-offset: 2px;
+}
+
+/* Slider: a recessed track like the inputs, a knob like the switch's. */
+input[type="range"] {
+  --knob: calc(var(--control-h) - 2 * var(--knob-pad));
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 140px;
+  height: var(--control-h);
+  margin: 0;
+  padding: 0 var(--knob-pad);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(var(--raised), var(--raised)) left / calc(var(--knob) + 2 * var(--knob-pad) + (100% - var(--knob) - 2 * var(--knob-pad)) * var(--v, 0)) 100% no-repeat,
+    var(--well);
+  box-shadow: var(--inset);
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--knob);
+  height: var(--knob);
+  border-radius: calc(var(--radius) - var(--knob-pad));
+  background: var(--one);
+  box-shadow: var(--shadow-1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: var(--knob);
+  height: var(--knob);
+  border: 0;
+  border-radius: calc(var(--radius) - var(--knob-pad));
+  background: var(--one);
+  box-shadow: var(--shadow-1);
+}
+
+input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+input[type="range"]:disabled {
+  cursor: default;
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+  background: var(--muted);
+}
+
+input[type="range"]:disabled::-moz-range-thumb {
+  background: var(--muted);
+}
