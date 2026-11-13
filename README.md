@@ -48,9 +48,9 @@ Keys: `space` play/pause, `←`/`→` stage, `e` end, `r` restart, `n` new run.
 
 ## Layout
 
-- `src/lib/quantum/` — protocol and physics, no UI. `photon.ts` (encoding,
+- `src/lib/quantum/`: protocol and physics, no UI. `photon.ts` (encoding,
   Malus's-law measurement), `bb84.ts` (full run from a config), `rng.ts`
   (seeded streams, one per party, so toggling Eve keeps Alice's and Bob's choices).
-- `src/lib/ui/player.svelte.ts` — stage definitions and playback: a position in
+- `src/lib/ui/player.svelte.ts`: stage definitions and playback. A position in
   `[0, stages]` decides how much of a precomputed run is shown.
-- `src/components/` — rendering only.
+- `src/components/`: rendering only.
