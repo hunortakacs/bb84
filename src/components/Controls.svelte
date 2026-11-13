@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Bb84Config } from "../lib/quantum/index.ts";
+  import FixedInput from "./FixedInput.svelte";
   import { type Player, STAGES } from "../lib/ui/player.svelte.ts";
 
   let { player }: { player: Player } = $props();
@@ -10,6 +12,63 @@
   /** Slider value while dragging; the run is recomputed on release. */
   let dragging = $state<number | null>(null);
   const rate = $derived(dragging ?? Math.round(eve.rate * 100));
+
+  // ---- manual bit/basis input ----
+
+  type Field = keyof NonNullable<Bb84Config["overrides"]>;
+  type Normalize = (c: string) => string | null;
+  const bit: Normalize = (c) => (c === "0" || c === "1" ? c : null);
+  const basis: Normalize = (c) =>
+    c === "+" ? "+" : /^[xX×]$/.test(c) ? "x" : null;
+
+  const FIELDS: {
+    key: Field;
+    label: string;
+    normalize: Normalize;
+    hint: string;
+  }[] = [
+    {
+      key: "aliceBits",
+      label: "alice bits",
+      normalize: bit,
+      hint: "0 or 1",
+    },
+    {
+      key: "aliceBases",
+      label: "alice bases",
+      normalize: basis,
+      hint: "+ or x",
+    },
+    {
+      key: "bobBases",
+      label: "bob bases",
+      normalize: basis,
+      hint: "+ or x",
+    },
+    {
+      key: "eveBases",
+      label: "eve bases",
+      normalize: basis,
+      hint: "+ or x; Eve lets photons marked - pass",
+    },
+  ];
+
+  const actual = $derived.by(() => {
+    const rs = player.result.records;
+    return {
+      aliceBits: rs.map((r) => r.aliceBit).join(""),
+      aliceBases: rs.map((r) => r.aliceBasis).join(""),
+      bobBases: rs.map((r) => r.bobBasis).join(""),
+      // "-": Eve lets this photon pass, so there is no basis to choose.
+      eveBases: rs.map((r) => r.eve?.basis ?? "-").join(""),
+    } satisfies Record<Field, string>;
+  });
+
+  const eveLocked = (i: number) => actual.eveBases[i] === "-";
+
+  function apply(key: Field, v: string) {
+    player.configure({ overrides: { ...player.config.overrides, [key]: v } });
+  }
 </script>
 
 <section class="panel controls">
@@ -52,7 +111,11 @@
       photons
       <select
         value={player.config.qubits}
-        onchange={(e) => player.configure({ qubits: +e.currentTarget.value })}
+        onchange={(e) =>
+          player.configure({
+            qubits: +e.currentTarget.value,
+            overrides: undefined,
+          })}
       >
         {#each QUBITS as q (q)}<option value={q}>{q}</option>{/each}
       </select>
@@ -114,6 +177,23 @@
         }}
       />
     </label>
+  </div>
+
+  <div class="manual">
+    {#each FIELDS as f (f.key)}
+      {@const off = f.key === "eveBases" && !eve.enabled}
+      <label class:disabled={off}>
+        <span>{f.label}</span>
+        <FixedInput
+          value={actual[f.key]}
+          normalize={f.normalize}
+          locked={f.key === "eveBases" ? eveLocked : undefined}
+          disabled={off}
+          title={f.hint}
+          onchange={(v) => apply(f.key, v)}
+        />
+      </label>
+    {/each}
   </div>
 </section>
 
@@ -206,5 +286,20 @@
   }
   .seed {
     width: calc(10ch + 20px);
+  }
+  .manual {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 6px 12px;
+    color: var(--muted);
+  }
+  .manual label {
+    display: contents;
+  }
+  .manual label > span {
+    align-self: center;
+  }
+  .manual label.disabled > :global(*) {
+    opacity: 0.4;
   }
 </style>

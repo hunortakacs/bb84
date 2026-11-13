@@ -75,7 +75,7 @@ export class Player {
   }
 
   newRun() {
-    this.configure({ seed: randomSeed() });
+    this.configure({ seed: randomSeed(), overrides: undefined });
   }
 
   // ---- stage stepping ----

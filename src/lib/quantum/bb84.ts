@@ -23,6 +23,16 @@ export interface Bb84Config {
   sampleFraction: number;
   /** Abort if the estimated QBER exceeds this. ~11% for BB84. */
   threshold: number;
+  /**
+   * Manual choices, one character per photon: bits 0/1, bases + or x (× also
+   * accepted). Any other character keeps the random choice at that index.
+   */
+  overrides?: {
+    aliceBits?: string;
+    aliceBases?: string;
+    bobBases?: string;
+    eveBases?: string;
+  };
 }
 
 export const DEFAULT_CONFIG: Bb84Config = {
@@ -138,11 +148,13 @@ function transmit(
   rng: ReturnType<typeof streams>,
 ): QubitRecord {
   // Every party draws from its own stream on every round so that the
-  // sequence of choices is independent of whether Eve is active.
-  const aliceBit = randomBit(rng.alice);
-  const aliceBasis = randomBasis(rng.alice);
-  const bobBasis = randomBasis(rng.bob);
-  const eveBasis = randomBasis(rng.eve);
+  // sequence of choices is independent of whether Eve is active. Overrides
+  // replace a draw after it is made, keeping the streams aligned.
+  const o = config.overrides;
+  const aliceBit = bitAt(o?.aliceBits, index, randomBit(rng.alice));
+  const aliceBasis = basisAt(o?.aliceBases, index, randomBasis(rng.alice));
+  const bobBasis = basisAt(o?.bobBases, index, randomBasis(rng.bob));
+  const eveBasis = basisAt(o?.eveBases, index, randomBasis(rng.eve));
   const eveRoll = rng.eve();
 
   const sent = encode(aliceBit, aliceBasis);
@@ -174,6 +186,16 @@ function transmit(
     error: basesMatch && bob.bit !== aliceBit,
     eveCorrect: eve !== null && eve.bit === aliceBit,
   };
+}
+
+function bitAt(s: string | undefined, i: number, drawn: Bit): Bit {
+  const c = s?.[i];
+  return c === "0" ? 0 : c === "1" ? 1 : drawn;
+}
+
+function basisAt(s: string | undefined, i: number, drawn: Basis): Basis {
+  const c = s?.[i];
+  return c === "+" ? "+" : c === "x" || c === "×" ? "x" : drawn;
 }
 
 function sampleSize(n: number, fraction: number): number {
