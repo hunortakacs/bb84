@@ -11,11 +11,11 @@ import {
  * acts on every qubit at once.
  */
 export const STAGES = [
-  { id: "prepare", ms: 700 },
-  { id: "transmit", ms: 2600 },
-  { id: "sift", ms: 900 },
-  { id: "estimate", ms: 1000 },
-  { id: "key", ms: 900 },
+  { id: "prepare", name: "előkészítés", ms: 700 },
+  { id: "transmit", name: "átvitel", ms: 2600 },
+  { id: "sift", name: "bázisegyeztetés", ms: 900 },
+  { id: "estimate", name: "hibabecslés", ms: 1000 },
+  { id: "key", name: "kulcs", ms: 900 },
 ] as const;
 
 export type StageId = (typeof STAGES)[number]["id"];

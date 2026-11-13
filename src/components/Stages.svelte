@@ -21,9 +21,9 @@
         <button
           class="title"
           onclick={() => player.goTo(i)}
-          title="play this stage"
+          title="lépés újrajátszása"
         >
-          <span>{i + 1} {s.id}</span>
+          <span>{i + 1}. {s.name}</span>
           {#if i === player.stage}
             <span class="bar" style:--p={player.progress(i)}></span>
           {/if}
@@ -33,24 +33,29 @@
         <div class="body" class:hidden={!complete(i)}>
           {#if s.id === "prepare"}
             <p class="out">
-              {n} states: {r.rectilinear} in +, {n - r.rectilinear} in ×
+              Alice {n} fotont készített elő: {r.rectilinear} + bázisban, {n -
+                r.rectilinear} × bázisban
             </p>
           {:else if s.id === "transmit"}
             <p class="out">
-              {n} photons measured{#if eveOn}; eve intercepted {r.intercepted},
-                changed the state of {r.disturbed}{/if}
+              Bob mind a {n} fotont megmérte.{#if eveOn}{" "}
+                Eve {r.intercepted} fotont fogott el, ebből {r.disturbed} állapotát
+                elrontotta, mert rossz bázisban mérte.{/if}
             </p>
           {:else if s.id === "sift"}
-            <p class="out">{r.sifted.length} of {n} kept</p>
+            <p class="out">
+              {n} bitből {r.sifted.length} maradt meg, ahol egyezett a bázis
+            </p>
           {:else if s.id === "estimate"}
             <p class="out" class:bad={r.aborted}>
-              {r.testErrors} of {r.test.length} differ, error rate {percent(
+              {r.test.length} tesztbitből {r.testErrors} hibás, a hibaarány {percent(
                 r.qber,
-              )}: {r.aborted ? "abort" : "continue"}
+              )}: {r.aborted ? "túl magas, leállnak" : "rendben, mehet tovább"}
             </p>
           {:else if r.aborted}
             <p class="out bad">
-              no key: eavesdropping suspected, everything is discarded
+              Nincs kulcs: valaki lehallgatta a csatornát, ezért minden bitet
+              eldobnak.
             </p>
           {:else}
             <div class="keys">
@@ -68,9 +73,10 @@
               </div>
             </div>
             <p class="out">
-              {r.key.length}-bit key, {r.keyMismatches} undetected mismatches{#if eveOn};
-                eve's guess matches
-                {r.eveKnownKeyBits} of {r.key.length} bits{/if}
+              {r.key.length} bites kulcs{#if r.keyMismatches}, de {r.keyMismatches}
+                bit eltér, és ezt a teszt nem vette észre{:else}, Alice és Bob
+                kulcsa megegyezik{/if}.{#if eveOn}{" "}
+                Eve {r.eveKnownKeyBits} bitet ismer belőle.{/if}
             </p>
           {/if}
         </div>

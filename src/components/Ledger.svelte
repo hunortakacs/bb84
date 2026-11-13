@@ -55,10 +55,7 @@
 
 <section class="panel ledger">
   <div class="head">
-    <span>qubits</span>
-    <span class="muted"
-      >{result.records.length} photons, hover a column to follow one</span
-    >
+    <span>fotonok</span>
   </div>
 
   <div
@@ -73,14 +70,14 @@
     <div class="labels">
       <span class="num"></span>
       <span>alice</span>
-      <span class="gap">channel</span>
+      <span class="gap">csatorna</span>
       {#if eveOn}
         <span>eve</span>
-        <span class="gap">channel</span>
+        <span class="gap">csatorna</span>
       {/if}
       <span>bob</span>
-      <span>bases</span>
-      <span>use</span>
+      <span>bázis</span>
+      <span>szerep</span>
     </div>
 
     <div class="cols" onmouseleave={() => (hover = null)} role="presentation">
@@ -145,7 +142,7 @@
     {:else}
       <span class="hint"
         >{flight >= 1
-          ? "hover a column to see what happened to that photon"
+          ? "vidd az egeret egy oszlopra, és megmutatja, mi történt azzal a fotonnal"
           : ""}</span
       >
     {/if}

@@ -56,38 +56,42 @@ export function probability(p: number): string {
   return `(p${NBSP}=${NBSP}${v})`;
 }
 
-export const percent = (x: number) => `${(x * 100).toFixed(1)}%`;
+export const percent = (x: number) =>
+  `${(x * 100).toFixed(1).replace(".", ",")}%`;
+
+/** "a 0-s" / "az 1-es": article and suffix agree with how the digit is read. */
+const bitName = (b: Bit) => (b ? "az 1-es" : "a 0-s");
 
 function aliceLine(r: QubitRecord): Rich {
   return [
-    `alice: bit ${r.aliceBit} in `,
+    `alice: ${bitName(r.aliceBit)} bitet a `,
     ...basisKets(r.aliceBasis),
-    ", sends ",
+    " bázisban küldi: ",
     ket(r.aliceBasis, r.aliceBit),
   ];
 }
 
 function eveLine(r: QubitRecord): Rich {
-  if (!r.eve) return ["eve: lets it pass"];
+  if (!r.eve) return ["eve: ezt a fotont nem méri meg, átengedi"];
   const p = outcomeProbability(r.sent, r.eve.basis, r.eve.bit);
   return [
-    "eve: measures ",
-    photonKet(r.sent),
-    " in ",
+    "eve: a ",
     ...basisKets(r.eve.basis),
+    " bázisban méri: ",
+    photonKet(r.sent),
     " → ",
     ket(r.eve.basis, r.eve.bit),
-    ` ${probability(p)}, resends it`,
+    ` ${probability(p)}, és ezt küldi tovább`,
   ];
 }
 
 function bobLine(r: QubitRecord): Rich {
   const p = outcomeProbability(r.arrived, r.bobBasis, r.bobBit);
   return [
-    "bob: measures ",
-    photonKet(r.arrived),
-    " in ",
+    "bob: a ",
     ...basisKets(r.bobBasis),
+    " bázisban méri: ",
+    photonKet(r.arrived),
     " → ",
     ket(r.bobBasis, r.bobBit),
     ` ${probability(p)}`,

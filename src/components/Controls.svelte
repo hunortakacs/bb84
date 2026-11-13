@@ -29,27 +29,27 @@
   }[] = [
     {
       key: "aliceBits",
-      label: "alice bits",
+      label: "alice bitjei",
       normalize: bit,
-      hint: "0 or 1",
+      hint: "0 vagy 1",
     },
     {
       key: "aliceBases",
-      label: "alice bases",
+      label: "alice bázisai",
       normalize: basis,
-      hint: "+ or x",
+      hint: "+ vagy x",
     },
     {
       key: "bobBases",
-      label: "bob bases",
+      label: "bob bázisai",
       normalize: basis,
-      hint: "+ or x",
+      hint: "+ vagy x",
     },
     {
       key: "eveBases",
-      label: "eve bases",
+      label: "eve bázisai",
       normalize: basis,
-      hint: "+ or x; Eve lets photons marked - pass",
+      hint: "+ vagy x; a - jelű fotonokat Eve átengedi",
     },
   ];
 
@@ -73,42 +73,40 @@
 
 <section class="panel controls">
   <div class="row">
-    <button class="primary" onclick={() => player.toggle()} title="space">
-      {player.playing ? "pause" : player.done ? "replay" : "play"}
+    <button class="primary" onclick={() => player.toggle()} title="szóköz">
+      {player.playing ? "szünet" : player.done ? "újra" : "lejátszás"}
     </button>
 
-    <div class="group" role="group" aria-label="stage">
-      <button
-        onclick={() => player.prev()}
-        disabled={player.atStart}
-        title="left">‹ stage</button
+    <div class="group" role="group" aria-label="léptetés">
+      <button onclick={() => player.prev()} disabled={player.atStart} title="←"
+        >‹ előző</button
       >
-      <button onclick={() => player.next()} disabled={player.done} title="right"
-        >stage ›</button
+      <button onclick={() => player.next()} disabled={player.done} title="→"
+        >következő ›</button
       >
     </div>
 
     <div class="group">
       <button onclick={() => player.end()} disabled={player.done} title="e"
-        >end</button
+        >végére</button
       >
       <button
         onclick={() => player.restart()}
         disabled={player.atStart}
-        title="r">restart</button
+        title="r">elejére</button
       >
-      <button onclick={() => player.newRun()} title="n">new run</button>
+      <button onclick={() => player.newRun()} title="n">új futás</button>
     </div>
 
     <span class="where">
-      stage {player.stage + 1}/{STAGES.length}
-      <span class="name">{STAGES[player.stage].id}</span>
+      {player.stage + 1}/{STAGES.length}
+      <span class="name">{STAGES[player.stage].name}</span>
     </span>
   </div>
 
   <div class="row settings">
     <label>
-      photons
+      fotonszám
       <select
         value={player.config.qubits}
         onchange={(e) =>
@@ -132,11 +130,11 @@
           })}
       />
       <span class="track" aria-hidden="true"></span>
-      eve
+      lehallgató (Eve)
     </label>
 
     <label class:disabled={!eve.enabled}>
-      intercepts
+      elfogott fotonok
       <input
         type="range"
         min="0"
@@ -157,7 +155,7 @@
     </label>
 
     <label>
-      speed
+      sebesség
       <select bind:value={player.speed}>
         {#each SPEEDS as s (s)}<option value={s}>{s}×</option>{/each}
       </select>

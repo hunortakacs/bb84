@@ -37,10 +37,10 @@
   );
   const label = $derived(
     basis === null
-      ? `bit ${bit}`
+      ? `bit: ${bit}`
       : bit === null
-        ? `basis ${plain(basisKets(basis))}`
-        : `${plain(ket(basis, bit))}, bit ${bit}`,
+        ? `${plain(basisKets(basis))} bázis`
+        : `${plain(ket(basis, bit))}, bit: ${bit}`,
   );
 </script>
 

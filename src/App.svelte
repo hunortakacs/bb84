@@ -45,7 +45,7 @@
 <main>
   <header>
     <h1>bb84</h1>
-    <p class="muted">quantum key distribution, stage by stage</p>
+    <p class="muted">kvantumkulcs-szétosztás lépésről lépésre</p>
   </header>
 
   <Controls {player} />
