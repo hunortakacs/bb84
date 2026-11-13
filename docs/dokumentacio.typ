@@ -20,12 +20,12 @@
 )
 #show table.cell.where(y: 0): strong
 #show figure.where(kind: table): set figure.caption(position: top)
-// Hungarian order: "1. ábra: …" instead of "Ábra 1: …".
+// magyar sorrend: „1. ábra: …”, nem „Ábra 1: …”
 #show figure.caption: it => context [
   #it.counter.display(it.numbering). #lower(it.supplement): #it.body
 ]
 
-// Ket notation: |0⟩
+// ket-jelölés: |0⟩
 #let ket(x) = $lr(|#x chevron.r)$
 
 #let kep(file, caption) = figure(
@@ -123,21 +123,21 @@ pnpm dev      # fejlesztői szerver
 - *fotonszám:* a küldött fotonok száma (16, 32, 64 vagy 128).
 - *lehallgató (Eve)* és *elfogott fotonok:* a lehallgató be- és kikapcsolása, illetve hogy a fotonok hány százalékát fogja el (0 és 100% között, 5%-os lépésekben; a futás a csúszka elengedésekor számolódik újra).
 - *sebesség:* az animáció sebessége (0,5× és 8× között).
-- *seed:* a véletlenszám-generátor kezdőértéke. Ugyanaz a seed mindig ugyanazt a futást adja, így egy érdekes eset visszaállítható.
+- *seed:* a véletlenszám-generátor kezdőértéke. Ugyanaz a seed mindig ugyanazt a futást adja, ezért ha egy futás érdekes, érdemes felírni a seedjét.
 
-Bármely beállítás módosításakor a futás újraszámolódik, de a már lejátszott szakaszok láthatók maradnak, így a beállítások hatása közvetlenül összehasonlítható. A jobb oldali szakaszlistában egy szakaszra kattintva az előtte lévők eredménye megjelenik, és a kiválasztott szakasz újra lejátszódik.
+Bármely beállítás módosításakor a futás újraszámolódik, de a már lejátszott szakaszok láthatók maradnak. Eve bekapcsolásakor például ugyanazon a futáson rögtön látszik, mi változott. A jobb oldali szakaszlistában egy szakaszra kattintva az előtte lévők eredménye megjelenik, és a kiválasztott szakasz újra lejátszódik.
 
 == Kézi bit- és bázisbevitel
 
 A vezérlőpanel alján négy mező van: *alice bitjei*, *alice bázisai*, *bob bázisai* és *eve bázisai*. Mindegyik az aktuális futás tényleges értékeit mutatja, fotononként egy karakterrel. Bitnek `0` vagy `1`, bázisnak `+` vagy `x` adható meg (az `X` és a `×` is elfogadott). Eve mezőjében a `-` azokat a fotonokat jelöli, amelyeket Eve átenged; ezeken nincs mit megadni. Kikapcsolt lehallgatásnál ez a mező nem szerkeszthető.
 
-A mezők az egyszer használatos kódok (OTP) beviteli mezőihez hasonlóan működnek, így eleve csak érvényes érték adható meg. A hossz mindig a fotonszám, karakter nem törölhető és nem szúrható be. Az aktuális karakter kiemelve látszik, gépeléskor ez cserélődik le, és a kurzor továbblép (Eve `-` helyeit átugorja). Érvénytelen karakternél rövid piros keret jelzi, hogy a mező nem fogadta el. A Backspace és a nyilak csak a kurzort mozgatják, a Home és az End a mező elejére, illetve végére ugrik. Beillesztéskor a karakterek a kurzortól kezdve töltik ki a helyeket; a szóközök és az érvénytelen karakterek kimaradnak, a mező végén túli rész elvész.
+A mezők úgy működnek, mint az egyszer használatos kódok (OTP) beviteli mezői: a hossz mindig a fotonszám, törölni vagy beszúrni nem lehet, csak felülírni. Gépeléskor a kiemelt karakter cserélődik le, és a kurzor továbblép (Eve `-` helyeit átugorja); érvénytelen karakterre a mező kerete röviden pirosra vált. A Backspace és a nyilak csak a kurzort mozgatják. Hosszabb sorozat beillesztéssel is megadható, ilyenkor a szóközök és az érvénytelen karakterek kimaradnak.
 
 Minden módosítás azonnal érvénybe lép, a nem módosított mezők a véletlen értékeket használják tovább. Az *új futás* és a fotonszám módosítása törli a kézi értékeket.
 
 == Fotonok követése
 
-A „fotonok” panelen minden oszlop egy foton. Az átvitel után egy oszlop fölé állva a panel alján megjelenik, mi történt az adott fotonnal, a kimenetek valószínűségével együtt. A 3. ábrán Alice #ket[+] állapotot küld, Eve rossz bázisban mér, és #ket[1]-et küld tovább, így Bob ½ valószínűséggel hibás bitet kap; itt ez történt (piros `k`). Egy cella fölé állva rövid felirat mutatja az állapotot (pl. „|+⟩, bit: 0”).
+A „fotonok” panelen minden oszlop egy foton. Az átvitel után egy oszlop fölé állva a panel alján megjelenik, mi történt az adott fotonnal, a kimenetek valószínűségével együtt. A 3. ábrán Alice #ket[+] állapotot küld, Eve rossz bázisban mér, és #ket[1]-et küld tovább, ezért Bob ½ valószínűséggel hibás bitet kap, és ebben a futásban pont ez történt (piros `k`). Egy cella fölé állva rövid felirat mutatja az állapotot (pl. „|+⟩, bit: 0”).
 
 #figure(
   image("kepek/reszletek.png", width: 100%),
@@ -159,7 +159,7 @@ A „fotonok” panelen minden oszlop egy foton. Az átvitel után egy oszlop f�
   caption: [Billentyűparancsok],
 )
 
-A parancsok nem működnek, amíg egy beviteli mezőn, listán vagy csúszkán van a fókusz (így gépeléskor sem), illetve Ctrl, Alt vagy Meta billentyűvel együtt.
+Ha egy beviteli mezőn, listán vagy csúszkán van a fókusz, a parancsok nem élnek, hogy gépelés közben ne lépjen tovább a lejátszás.
 
 = Az egyes szakaszok megjelenítése
 
@@ -202,7 +202,7 @@ A várható QBER az 1.4. pont szerint az elfogott arány negyede. A program saj�
   caption: [A lehallgatás hatása (128 foton, 200 futás átlaga)],
 )
 
-Teljes lehallgatásnál tehát szinte mindig leáll a protokoll (1. ábra). Kis fotonszámnál viszont a tesztminta kicsi (128 fotonnál kb. 32 tesztbit), ezért a becslés szór, és egy lehallgatott futás véletlenül a küszöb alatt maradhat. Az 5. ábrán Eve a fotonok felét fogja el; a 10 tesztbitből csak 1 hibás (10%), így a protokoll folytatódik, de a kulcsban marad egy eltérés, amit a teszt nem vett észre, és Eve a 9 kulcsbitből 3-at ismer.
+Teljes lehallgatásnál tehát szinte mindig leáll a protokoll (1. ábra). Kis fotonszámnál viszont a tesztminta kicsi (128 fotonnál kb. 32 tesztbit), ezért a becslés szór, és egy lehallgatott futás véletlenül a küszöb alatt maradhat. Az 5. ábrán Eve a fotonok felét fogja el. A 10 tesztbitből csak 1 hibás (10%), ez épp a küszöb alatt van, és a protokoll folytatódik. A kulcsban viszont marad egy eltérés, amit a teszt nem vett észre, Eve pedig a 9 kulcsbitből 3-at ismer.
 
 #kep(
   "kulcs.png",
@@ -215,7 +215,7 @@ Teljes lehallgatásnál tehát szinte mindig leáll a protokoll (1. ábra). Kis 
 - *Svelte 5:* felhasználói felület, „runes” reaktivitással (`$state`, `$derived`, `$props`).
 - *TypeScript:* a teljes kód típusos.
 - *Vite:* fejlesztői szerver és buildeszköz.
-- *vite-plugin-singlefile:* a build során minden JavaScriptet és CSS-t az `index.html`-be ágyaz, így a kész program egyetlen, böngészőben közvetlenül megnyitható fájl.
+- *vite-plugin-singlefile:* a build során minden JavaScriptet és CSS-t az `index.html`-be ágyaz, ettől lesz a kész program egyetlen fájl.
 
 == Mappaszerkezet
 
@@ -253,11 +253,13 @@ A `Player` osztály (`player.svelte.ts`) csak azt dönti el, mennyi látszik ebb
 
 == Véletlenszámok
 
-A program a *mulberry32* álvéletlen-generátort használja, így minden futás a seedből pontosan visszajátszható. Az algoritmus Tommy Ettinger nevéhez fűződik; mindössze néhány sor, ezért a kód része, nem külső csomag. Szimulátorhoz a visszajátszhatóság miatt ez a jó választás, valódi QKD-ben viszont a bit- és bázisválasztásokhoz valódi (vagy kriptográfiailag biztonságos) véletlenforrás kell. Egy seedből öt független folyam származik (`streams`): `alice`, `bob`, `eve`, `nature` (mérési kimenetek) és `publicChannel` (a tesztminta kiválasztása). Minden résztvevő minden fotonnál húz a saját folyamából, akkor is, ha Eve ki van kapcsolva, ezért Eve be- és kikapcsolása nem változtatja meg Alice és Bob választásait, és a két eset közvetlenül összevethető. A kézi bevitel is erre épül: a program a véletlen értéket mindig kihúzza, és csak utána cseréli a megadottra, így a folyamok nem csúsznak el.
+Véletlenszám-generátornak a *mulberry32*-t választottuk (Tommy Ettinger algoritmusa). Néhány soros, ezért külső csomag helyett egyszerűen a kódba került (`rng.ts`), és seedelhető, tehát minden futás pontosan visszajátszható. Valódi QKD-hez persze nem lenne elég: ott a bit- és bázisválasztásokhoz valódi (vagy legalább kriptográfiailag biztonságos) véletlenforrás kell.
+
+Egy seedből öt külön folyam származik (`streams`): `alice`, `bob`, `eve`, `nature` (mérési kimenetek) és `publicChannel` (a tesztminta kiválasztása). Azt akartuk, hogy Eve be- és kikapcsolása ne változtassa meg Alice és Bob választásait, ezért minden résztvevő minden fotonnál húz a saját folyamából, Eve akkor is, ha ki van kapcsolva. Kézi bevitelnél ugyanez a helyzet: a program a véletlen értéket ekkor is kihúzza, és csak utána cseréli le a megadottra.
 
 = Tesztek és eredmények
 
-A tesztek a `src/lib/quantum/bb84.test.ts` fájlban vannak, a Node.js beépített tesztkeretével (`node:test`, `node:assert`), külön függőség nélkül. Futtatás: `pnpm test`. A TypeScript-fájlokat a Node.js közvetlenül futtatja, ehhez Node.js 22.18 vagy újabb kell (a fejlesztés 22.22-vel történt).
+A tesztek a `src/lib/quantum/bb84.test.ts` fájlban vannak, a Node.js beépített tesztkeretével (`node:test`, `node:assert`), külön függőség nélkül. Futtatás: `pnpm test`. A TypeScript-fájlokat a Node.js közvetlenül futtatja, ehhez Node.js 22.18 vagy újabb kell (mi 22.22-t használtunk).
 
 #figure(
   table(
@@ -288,7 +290,7 @@ A tesztek a `src/lib/quantum/bb84.test.ts` fájlban vannak, a Node.js beépítet
   caption: [Automatikus tesztek],
 )
 
-Mind a 8 teszt sikeres. A rögzített seeddel mért értékek: lehallgatás nélkül a QBER 0, a megtartott arány 47,3%; teljes lehallgatásnál 970 tesztbitből 251 hibás, azaz a QBER 25,9%, ami jól egyezik az elméleti 25%-kal. A típusellenőrzés (`pnpm check`: svelte-check és tsc) hiba és figyelmeztetés nélkül fut, a build (`pnpm build`) egyetlen, kb. 77 kB-os `dist/index.html` fájlt állít elő.
+Mind a 8 teszt sikeres. A rögzített seeddel mért értékek: lehallgatás nélkül a QBER 0, a megtartott arány 47,3%; teljes lehallgatásnál 970 tesztbitből 251 hibás, azaz a QBER 25,9%, ez közel van az elméleti 25%-hoz. A típusellenőrzés (`pnpm check`: svelte-check és tsc) hiba és figyelmeztetés nélkül fut, a build (`pnpm build`) egyetlen, kb. 77 kB-os `dist/index.html` fájlt állít elő.
 
 = Felhasznált könyvtárak és források
 
