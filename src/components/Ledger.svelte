@@ -28,7 +28,8 @@
 
   const clamp = (u: number) => Math.min(1, Math.max(0, u));
   const ease = (u: number) => u * u * (3 - 2 * u);
-  const span = (u: number, a: number, b: number) => ease(clamp((u - a) / (b - a)));
+  const span = (u: number, a: number, b: number) =>
+    ease(clamp((u - a) / (b - a)));
 
   const [prep, flight, sift, test, key] = $derived(progress);
 
@@ -36,7 +37,9 @@
   const atEve = $derived(eveOn && flight >= AT_EVE);
   const pastEve = $derived(eveOn && flight >= LEAVE_EVE);
   const flyY = $derived(
-    eveOn ? (span(flight, 0, AT_EVE) + span(flight, LEAVE_EVE, 1)) * HOP : span(flight, 0, 1) * HOP,
+    eveOn
+      ? (span(flight, 0, AT_EVE) + span(flight, LEAVE_EVE, 1)) * HOP
+      : span(flight, 0, 1) * HOP,
   );
   // With Eve the photon pauses on her row; hide it there unless it passes through.
   const holding = $derived(atEve && !pastEve);
@@ -45,13 +48,17 @@
   const isKey = $derived(new Set(result.key));
 
   let hover = $state<number | null>(null);
-  const lines = $derived(hover !== null && flight >= 1 ? describe(result.records[hover], eveOn) : []);
+  const lines = $derived(
+    hover !== null && flight >= 1 ? describe(result.records[hover], eveOn) : [],
+  );
 </script>
 
 <section class="panel ledger">
   <div class="head">
     <span>qubits</span>
-    <span class="muted">{result.records.length} photons, hover a column to follow one</span>
+    <span class="muted"
+      >{result.records.length} photons, hover a column to follow one</span
+    >
   </div>
 
   <div
@@ -78,7 +85,10 @@
 
     <div class="cols" onmouseleave={() => (hover = null)} role="presentation">
       {#each result.records as r (r.index)}
-        {@const err = r.error && ((isTest.has(r.index) && test > 0) || (isKey.has(r.index) && key > 0))}
+        {@const err =
+          r.error &&
+          ((isTest.has(r.index) && test > 0) ||
+            (isKey.has(r.index) && key > 0))}
         <div
           class="col"
           class:dropped={!r.basesMatch && sift > 0}
@@ -87,12 +97,20 @@
           role="presentation"
         >
           <span class="num">{r.index % 4 === 0 ? r.index + 1 : ""}</span>
-          <span class="prep">{#if prep > 0}<Glyph bit={r.aliceBit} basis={r.aliceBasis} />{/if}</span>
+          <span class="prep"
+            >{#if prep > 0}<Glyph
+                bit={r.aliceBit}
+                basis={r.aliceBasis}
+              />{/if}</span
+          >
           <span class="gap"></span>
           {#if eveOn}
             <span class="evecell">
               {#if atEve}
-                {#if r.eve}<Glyph bit={r.eve.bit} basis={r.eve.basis} />{:else}<i class="pass">·</i>{/if}
+                {#if r.eve}<Glyph
+                    bit={r.eve.bit}
+                    basis={r.eve.basis}
+                  />{:else}<i class="pass">·</i>{/if}
               {/if}
             </span>
             <span class="gap"></span>
@@ -104,7 +122,9 @@
               <Glyph basis={r.bobBasis} />
             {/if}
           </span>
-          <span class="mark sift">{sift > 0 ? (r.basesMatch ? "=" : "≠") : ""}</span>
+          <span class="mark sift"
+            >{sift > 0 ? (r.basesMatch ? "=" : "≠") : ""}</span
+          >
           <span class="mark" class:bad={err}>
             {#if isTest.has(r.index) && test > 0}<b class="test">t</b>
             {:else if isKey.has(r.index) && key > 0}<b class="key">k</b>{/if}
@@ -123,7 +143,11 @@
     {#if lines.length}
       {#each lines as l, i (i)}<span><Rich text={l} /></span>{/each}
     {:else}
-      <span class="hint">{flight >= 1 ? "hover a column to see what happened to that photon" : ""}</span>
+      <span class="hint"
+        >{flight >= 1
+          ? "hover a column to see what happened to that photon"
+          : ""}</span
+      >
     {/if}
   </div>
 </section>
@@ -202,7 +226,8 @@
   }
   /* The wire each photon travels along. */
   .col .gap {
-    background: linear-gradient(var(--dim), var(--dim)) center / 1px 100% no-repeat;
+    background: linear-gradient(var(--dim), var(--dim)) center / 1px 100%
+      no-repeat;
     opacity: 0.35;
   }
   .prep {

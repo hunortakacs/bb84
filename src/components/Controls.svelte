@@ -19,25 +19,41 @@
     </button>
 
     <div class="group" role="group" aria-label="stage">
-      <button onclick={() => player.prev()} disabled={player.atStart} title="left">‹ stage</button>
-      <button onclick={() => player.next()} disabled={player.done} title="right">stage ›</button>
+      <button
+        onclick={() => player.prev()}
+        disabled={player.atStart}
+        title="left">‹ stage</button
+      >
+      <button onclick={() => player.next()} disabled={player.done} title="right"
+        >stage ›</button
+      >
     </div>
 
     <div class="group">
-      <button onclick={() => player.end()} disabled={player.done} title="e">end</button>
-      <button onclick={() => player.restart()} disabled={player.atStart} title="r">restart</button>
+      <button onclick={() => player.end()} disabled={player.done} title="e"
+        >end</button
+      >
+      <button
+        onclick={() => player.restart()}
+        disabled={player.atStart}
+        title="r">restart</button
+      >
       <button onclick={() => player.newRun()} title="n">new run</button>
     </div>
 
     <span class="where">
-      stage {player.stage + 1}/{STAGES.length} <span class="name">{STAGES[player.stage].id}</span>
+      stage {player.stage + 1}/{STAGES.length}
+      <span class="name">{STAGES[player.stage].id}</span>
     </span>
   </div>
 
   <div class="row settings">
     <label>
       photons
-      <select value={player.config.qubits} onchange={(e) => player.configure({ qubits: +e.currentTarget.value })}>
+      <select
+        value={player.config.qubits}
+        onchange={(e) => player.configure({ qubits: +e.currentTarget.value })}
+      >
         {#each QUBITS as q (q)}<option value={q}>{q}</option>{/each}
       </select>
     </label>
@@ -47,7 +63,10 @@
         type="checkbox"
         role="switch"
         checked={eve.enabled}
-        onchange={(e) => player.configure({ eve: { ...eve, enabled: e.currentTarget.checked } })}
+        onchange={(e) =>
+          player.configure({
+            eve: { ...eve, enabled: e.currentTarget.checked },
+          })}
       />
       <span class="track" aria-hidden="true"></span>
       eve
@@ -66,7 +85,9 @@
         oninput={(e) => (dragging = +e.currentTarget.value)}
         onchange={(e) => {
           dragging = null;
-          player.configure({ eve: { ...eve, rate: +e.currentTarget.value / 100 } });
+          player.configure({
+            eve: { ...eve, rate: +e.currentTarget.value / 100 },
+          });
         }}
       />
       <span class="val">{rate}%</span>

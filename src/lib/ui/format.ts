@@ -9,10 +9,15 @@ export type Ket = { ket: string };
 export type Rich = (string | Ket)[];
 
 const NBSP = "\u00a0";
-const KET_LABELS: Record<Basis, [string, string]> = { "+": ["0", "1"], x: ["+", "−"] };
+const KET_LABELS: Record<Basis, [string, string]> = {
+  "+": ["0", "1"],
+  x: ["+", "−"],
+};
 
 /** Ket of a BB84 state: + basis → |0⟩ |1⟩, × basis → |+⟩ |−⟩. */
-export const ket = (basis: Basis, bit: Bit): Ket => ({ ket: KET_LABELS[basis][bit] });
+export const ket = (basis: Basis, bit: Bit): Ket => ({
+  ket: KET_LABELS[basis][bit],
+});
 
 export const photonKet = (p: Photon): Ket => {
   const { basis, bit } = decode(p);
@@ -22,11 +27,19 @@ export const photonKet = (p: Photon): Ket => {
 export const basisSymbol = (b: Basis) => (b === "+" ? "+" : "×");
 
 /** Basis with its eigenstates, e.g. × {|+⟩,|−⟩}. */
-export const basisKets = (b: Basis): Rich => [`${basisSymbol(b)}${NBSP}{`, ket(b, 0), ",", ket(b, 1), "}"];
+export const basisKets = (b: Basis): Rich => [
+  `${basisSymbol(b)}${NBSP}{`,
+  ket(b, 0),
+  ",",
+  ket(b, 1),
+  "}",
+];
 
 /** Plain-text form, for places that cannot hold markup (tooltips). */
 export const plain = (r: Rich | Ket) =>
-  (Array.isArray(r) ? r : [r]).map((p) => (typeof p === "string" ? p : `|${p.ket}⟩`)).join("");
+  (Array.isArray(r) ? r : [r])
+    .map((p) => (typeof p === "string" ? p : `|${p.ket}⟩`))
+    .join("");
 
 /** Inverse of `plain`: turn |x⟩ in a string back into kets. */
 export const parseKets = (text: string): Rich =>
@@ -34,14 +47,24 @@ export const parseKets = (text: string): Rich =>
 
 /** Born-rule probability, kept on one line. */
 export function probability(p: number): string {
-  const v = Math.abs(p - 1) < 1e-9 ? "1" : Math.abs(p - 0.5) < 1e-9 ? "½" : p.toFixed(2);
+  const v =
+    Math.abs(p - 1) < 1e-9
+      ? "1"
+      : Math.abs(p - 0.5) < 1e-9
+        ? "½"
+        : p.toFixed(2);
   return `(p${NBSP}=${NBSP}${v})`;
 }
 
 export const percent = (x: number) => `${(x * 100).toFixed(1)}%`;
 
 function aliceLine(r: QubitRecord): Rich {
-  return [`alice: bit ${r.aliceBit} in `, ...basisKets(r.aliceBasis), ", sends ", ket(r.aliceBasis, r.aliceBit)];
+  return [
+    `alice: bit ${r.aliceBit} in `,
+    ...basisKets(r.aliceBasis),
+    ", sends ",
+    ket(r.aliceBasis, r.aliceBit),
+  ];
 }
 
 function eveLine(r: QubitRecord): Rich {
@@ -72,5 +95,10 @@ function bobLine(r: QubitRecord): Rich {
 }
 
 export function describe(r: QubitRecord, eveOn: boolean): Rich[] {
-  return [[`#${r.index + 1}`], aliceLine(r), ...(eveOn ? [eveLine(r)] : []), bobLine(r)];
+  return [
+    [`#${r.index + 1}`],
+    aliceLine(r),
+    ...(eveOn ? [eveLine(r)] : []),
+    bobLine(r),
+  ];
 }

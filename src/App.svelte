@@ -14,7 +14,13 @@
 
   function onkeydown(e: KeyboardEvent) {
     const el = e.target as HTMLElement;
-    if (e.ctrlKey || e.metaKey || e.altKey || el.closest("input, select, textarea")) return;
+    if (
+      e.ctrlKey ||
+      e.metaKey ||
+      e.altKey ||
+      el.closest("input, select, textarea")
+    )
+      return;
     // Let a focused button handle its own activation keys.
     if (el.closest("button") && (e.key === " " || e.key === "Enter")) return;
     const actions: Record<string, () => void> = {
@@ -45,7 +51,11 @@
   <Controls {player} />
 
   <div class="layout">
-    <Ledger result={player.result} progress={STAGES.map((_, i) => player.progress(i))} {eveOn} />
+    <Ledger
+      result={player.result}
+      progress={STAGES.map((_, i) => player.progress(i))}
+      {eveOn}
+    />
     <Stages {player} />
   </div>
 

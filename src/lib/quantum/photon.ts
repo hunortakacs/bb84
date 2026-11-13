@@ -28,7 +28,11 @@ export function encode(bit: Bit, basis: Basis): Photon {
  * Born rule for a linearly polarized photon: P(0) = cos²(θ − φ), where φ is
  * the basis' 0-axis (Malus's law). Same basis → 1 or 0, conjugate basis → ½.
  */
-export function outcomeProbability(photon: Photon, basis: Basis, bit: Bit): number {
+export function outcomeProbability(
+  photon: Photon,
+  basis: Basis,
+  bit: Bit,
+): number {
   const rad = ((photon.angle - BASIS_OFFSET[basis]) * Math.PI) / 180;
   const p0 = clamp01(Math.cos(rad) ** 2);
   return bit === 0 ? p0 : 1 - p0;
@@ -38,7 +42,11 @@ export function outcomeProbability(photon: Photon, basis: Basis, bit: Bit): numb
 export function measure(photon: Photon, basis: Basis, rng: Rng): Measurement {
   const p0 = outcomeProbability(photon, basis, 0);
   const bit: Bit = rng() < p0 ? 0 : 1;
-  return { bit, after: encode(bit, basis), probability: bit === 0 ? p0 : 1 - p0 };
+  return {
+    bit,
+    after: encode(bit, basis),
+    probability: bit === 0 ? p0 : 1 - p0,
+  };
 }
 
 /** Recover (basis, bit) for one of the four BB84 states. */

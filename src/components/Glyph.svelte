@@ -19,18 +19,41 @@
 
   let { bit = null, basis = null, size = 18, x, y }: Props = $props();
 
-  const fill = $derived(bit === null ? "var(--well)" : bit ? "var(--one)" : "var(--zero)");
-  const ink = $derived(bit === null ? "var(--muted)" : bit ? "var(--zero)" : "var(--one)");
+  const fill = $derived(
+    bit === null ? "var(--well)" : bit ? "var(--one)" : "var(--zero)",
+  );
+  const ink = $derived(
+    bit === null ? "var(--muted)" : bit ? "var(--zero)" : "var(--one)",
+  );
   // SVG y grows downward, so a counter-clockwise polarization angle is negative.
   const angles = $derived(
-    basis === null ? [] : bit === null ? (basis === "+" ? [0, 90] : [45, 135]) : [(basis === "+" ? 0 : 45) + 90 * bit],
+    basis === null
+      ? []
+      : bit === null
+        ? basis === "+"
+          ? [0, 90]
+          : [45, 135]
+        : [(basis === "+" ? 0 : 45) + 90 * bit],
   );
   const label = $derived(
-    basis === null ? `bit ${bit}` : bit === null ? `basis ${plain(basisKets(basis))}` : `${plain(ket(basis, bit))}, bit ${bit}`,
+    basis === null
+      ? `bit ${bit}`
+      : bit === null
+        ? `basis ${plain(basisKets(basis))}`
+        : `${plain(ket(basis, bit))}, bit ${bit}`,
   );
 </script>
 
-<svg {x} {y} width={size} height={size} viewBox="0 0 20 20" role="img" aria-label={label} data-tip={label}>
+<svg
+  {x}
+  {y}
+  width={size}
+  height={size}
+  viewBox="0 0 20 20"
+  role="img"
+  aria-label={label}
+  data-tip={label}
+>
   <rect width="20" height="20" rx="2.5" {fill} />
   {#each angles as a (a)}
     <line

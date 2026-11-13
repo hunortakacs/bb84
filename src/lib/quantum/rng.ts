@@ -17,7 +17,8 @@ export function mulberry32(seed: number): Rng {
  * stream, so toggling Eve does not change Alice's or Bob's random choices.
  */
 export function streams(seed: number) {
-  const derive = (salt: number) => mulberry32((seed ^ Math.imul(salt, 0x9e3779b1)) >>> 0);
+  const derive = (salt: number) =>
+    mulberry32((seed ^ Math.imul(salt, 0x9e3779b1)) >>> 0);
   return {
     alice: derive(1),
     bob: derive(2),

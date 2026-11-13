@@ -12,14 +12,24 @@
     const el = (e.target as Element).closest?.("[data-tip]");
     if (!el) return void (tip = null);
     const r = el.getBoundingClientRect();
-    tip = { text: el.getAttribute("data-tip") ?? "", x: r.left + r.width / 2, y: r.top };
+    tip = {
+      text: el.getAttribute("data-tip") ?? "",
+      x: r.left + r.width / 2,
+      y: r.top,
+    };
   }
 </script>
 
-<svelte:window {onpointerover} onscroll={() => (tip = null)} onblur={() => (tip = null)} />
+<svelte:window
+  {onpointerover}
+  onscroll={() => (tip = null)}
+  onblur={() => (tip = null)}
+/>
 
 {#if tip}
-  <div class="tip" style:left="{tip.x}px" style:top="{tip.y}px" role="tooltip"><Rich text={parseKets(tip.text)} /></div>
+  <div class="tip" style:left="{tip.x}px" style:top="{tip.y}px" role="tooltip">
+    <Rich text={parseKets(tip.text)} />
+  </div>
 {/if}
 
 <style>

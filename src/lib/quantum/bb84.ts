@@ -127,7 +127,8 @@ export function runBb84(config: Bb84Config): Bb84Result {
     eveKnownKeyBits: key.filter((i) => records[i].eveCorrect).length,
     rectilinear: records.filter((r) => r.aliceBasis === "+").length,
     intercepted: records.filter((r) => r.eve).length,
-    disturbed: records.filter((r) => r.eve && r.eve.basis !== r.aliceBasis).length,
+    disturbed: records.filter((r) => r.eve && r.eve.basis !== r.aliceBasis)
+      .length,
   };
 }
 

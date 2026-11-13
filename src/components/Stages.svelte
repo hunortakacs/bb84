@@ -18,7 +18,11 @@
   <ol>
     {#each STAGES as s, i (s.id)}
       <li class:now={i === player.stage} class:ahead={i > player.stage}>
-        <button class="title" onclick={() => player.goTo(i)} title="play this stage">
+        <button
+          class="title"
+          onclick={() => player.goTo(i)}
+          title="play this stage"
+        >
           <span>{i + 1} {s.id}</span>
           {#if i === player.stage}
             <span class="bar" style:--p={player.progress(i)}></span>
@@ -28,19 +32,26 @@
         <!-- Always rendered so its space is reserved; revealed when the stage completes. -->
         <div class="body" class:hidden={!complete(i)}>
           {#if s.id === "prepare"}
-            <p class="out">{n} states: {r.rectilinear} in +, {n - r.rectilinear} in ×</p>
+            <p class="out">
+              {n} states: {r.rectilinear} in +, {n - r.rectilinear} in ×
+            </p>
           {:else if s.id === "transmit"}
             <p class="out">
-              {n} photons measured{#if eveOn}; eve intercepted {r.intercepted}, changed the state of {r.disturbed}{/if}
+              {n} photons measured{#if eveOn}; eve intercepted {r.intercepted},
+                changed the state of {r.disturbed}{/if}
             </p>
           {:else if s.id === "sift"}
             <p class="out">{r.sifted.length} of {n} kept</p>
           {:else if s.id === "estimate"}
             <p class="out" class:bad={r.aborted}>
-              {r.testErrors} of {r.test.length} differ, error rate {percent(r.qber)}: {r.aborted ? "abort" : "continue"}
+              {r.testErrors} of {r.test.length} differ, error rate {percent(
+                r.qber,
+              )}: {r.aborted ? "abort" : "continue"}
             </p>
           {:else if r.aborted}
-            <p class="out bad">no key: eavesdropping suspected, everything is discarded</p>
+            <p class="out bad">
+              no key: eavesdropping suspected, everything is discarded
+            </p>
           {:else}
             <div class="keys">
               <div class="keyrow">
@@ -50,12 +61,15 @@
               <div class="keyrow">
                 <span class="who">bob</span>
                 {#each r.bobKey as b, j (j)}
-                  <span class:mismatch={b !== r.aliceKey[j]}><Glyph bit={b} size={14} /></span>
+                  <span class:mismatch={b !== r.aliceKey[j]}
+                    ><Glyph bit={b} size={14} /></span
+                  >
                 {/each}
               </div>
             </div>
             <p class="out">
-              {r.key.length}-bit key, {r.keyMismatches} undetected mismatches{#if eveOn}; eve's guess matches
+              {r.key.length}-bit key, {r.keyMismatches} undetected mismatches{#if eveOn};
+                eve's guess matches
                 {r.eveKnownKeyBits} of {r.key.length} bits{/if}
             </p>
           {/if}
@@ -130,7 +144,8 @@
     width: 64px;
     height: 3px;
     border-radius: 2px;
-    background: linear-gradient(var(--muted), var(--muted)) left / calc(var(--p) * 100%) 100% no-repeat var(--well);
+    background: linear-gradient(var(--muted), var(--muted)) left /
+      calc(var(--p) * 100%) 100% no-repeat var(--well);
   }
   .body {
     transition: opacity 0.3s;

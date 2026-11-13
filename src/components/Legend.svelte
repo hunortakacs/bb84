@@ -14,10 +14,22 @@
 
 <div class="legend">
   {#each STATES as s (s.line)}
-    <span><Glyph bit={s.bit} basis={s.basis} size={16} /><span><Rich text={ket(s.basis, s.bit)} /> {s.line}</span></span>
+    <span
+      ><Glyph bit={s.bit} basis={s.basis} size={16} /><span
+        ><Rich text={ket(s.basis, s.bit)} /> {s.line}</span
+      ></span
+    >
   {/each}
-  <span><Glyph basis="+" size={16} /><span>basis <Rich text={basisKets("+")} /></span></span>
-  <span><Glyph basis="x" size={16} /><span>basis <Rich text={basisKets("x")} /></span></span>
+  <span
+    ><Glyph basis="+" size={16} /><span
+      >basis <Rich text={basisKets("+")} /></span
+    ></span
+  >
+  <span
+    ><Glyph basis="x" size={16} /><span
+      >basis <Rich text={basisKets("x")} /></span
+    ></span
+  >
   <span>fill: black 0, white 1 · line: polarization</span>
   <span>= bases match · t test bit · k key bit</span>
 </div>

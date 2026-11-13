@@ -1,4 +1,10 @@
-import { type Bb84Config, type Bb84Result, DEFAULT_CONFIG, randomSeed, runBb84 } from "../quantum/index.ts";
+import {
+  type Bb84Config,
+  type Bb84Result,
+  DEFAULT_CONFIG,
+  randomSeed,
+  runBb84,
+} from "../quantum/index.ts";
 
 /**
  * The protocol as a sequence of stages. Each stage is one animation that

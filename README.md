@@ -31,13 +31,13 @@ plays the next stage, `‹ stage` undoes one, and clicking a stage in the side
 panel replays it. Changing a setting keeps the completed stages, so toggling Eve
 shows the same run with and without her.
 
-| stage    | animation                                   | what becomes public            |
-| -------- | ------------------------------------------- | ------------------------------ |
-| prepare  | Alice's states appear                       | nothing                        |
-| transmit | photons travel down to Bob, through Eve     | nothing                        |
-| sift     | mismatched bases fade out                   | Bob's bases, which ones match  |
-| estimate | test bits are marked, errors in red         | the test bits, error rate      |
-| key      | key bits are marked, keys compared          | nothing (abort if error > 11%) |
+| stage    | animation                               | what becomes public            |
+| -------- | --------------------------------------- | ------------------------------ |
+| prepare  | Alice's states appear                   | nothing                        |
+| transmit | photons travel down to Bob, through Eve | nothing                        |
+| sift     | mismatched bases fade out               | Bob's bases, which ones match  |
+| estimate | test bits are marked, errors in red     | the test bits, error rate      |
+| key      | key bits are marked, keys compared      | nothing (abort if error > 11%) |
 
 The public channel is assumed to be authenticated: Eve can read it but not alter it.
 
